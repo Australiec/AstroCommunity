@@ -20,24 +20,22 @@ class Nicknames(commands.Cog):
         await member.edit(nick=response)
         print(f"Пользователю {member.id} был поменян ник на {response} на сервере {member.guild}")
 
-    @commands.slash_command(default_member_permissions=disnake.Permissions(administrator=True), guild_only=True)
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    @commands.slash_command(name="обновить_ник", description="Поставить текущий ник с сервера", default_member_permissions=disnake.Permissions(administrator=True), guild_only=True)
+    @commands.cooldown(1, 30, commands.BucketType.guild)
     async def update_nickname(
             self,
             inter: disnake.ApplicationCommandInteraction,
             member: disnake.Member = commands.Param(name="пользователь", description="Выберите пользователя")
     ):
-        """Обновляет ник для пользователя"""
         await self.update_nickname_logic(inter, member)
 
     @commands.user_command(name="Обновить ник", default_member_permissions=disnake.Permissions(administrator=True), guild_only=True)
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    @commands.cooldown(1, 30, commands.BucketType.guild)
     async def update_nickname_context(
             self,
             inter: disnake.UserCommandInteraction,
             member: disnake.Member
     ):
-        """Обновляет ник для пользователя"""
         await self.update_nickname_logic(inter, member)
 
     async def update_nickname_logic(self, inter, member):
