@@ -12,7 +12,7 @@ class ErrorHandler(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_error(self, inter: disnake.ApplicationCommandInteraction, error: commands.CommandError):
+    async def on_slash_command_error(self, inter: disnake.ApplicationCommandInteraction, error: commands.CommandError):
         await self.command_error_logic(inter, error)
 
     @commands.Cog.listener()
@@ -26,6 +26,16 @@ class ErrorHandler(commands.Cog):
                     description=f"> ## :clock3: Кулдаун\n"
                                 f"Немного подождите перед повторным выполнением команды!",
                     color=disnake.Color.light_grey(),
+                ), ephemeral=True,
+            )
+        if isinstance(error, commands.CommandInvokeError):
+            return await inter.send(
+                embed=disnake.Embed(
+                    description=f"> ## :x: Ошибка\n"
+                                f"У бота недостаточно разрешений для выполнения действий.\n"
+                                f"- Выдайте боту права администратора\n"
+                                f"- Поставьте роль бота максимально высоко в списке ролей",
+                    color=disnake.Color.red(),
                 ), ephemeral=True,
             )
         raise error
